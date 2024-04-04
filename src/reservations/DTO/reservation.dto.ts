@@ -88,6 +88,8 @@ export class ReservationDto{
         let bookingData : ValidatedBookingDataModel = this.BOOKING_DATA_EMPTY;
         let reservations:ValidatedBookingDataModel[] = [];
         bookingData.message = 'I Parametri di ricerca inseriti non sono corretti. ';
+        bookingData.valid = false;
+        bookingData.ticket = '';
         reservations.push(bookingData);
 
         return reservations;
@@ -136,6 +138,7 @@ export class ReservationDto{
             else throw new Error('Formato Data Non Valido. Inserire il formato Data: YYYY-MM-DD');
         } catch (error) {
             validatedBookingData.message = error.message;
+            validatedBookingData.ticket = '';
             validatedBookingData.valid = false;
         }
         return validatedBookingData;
@@ -145,7 +148,10 @@ export class ReservationDto{
         const fiscalCodeRegEx = new RegExp(/^[A-Z]{6}\d{2}[A-Z]{1}\d{2}[A-Z]{1}\d{3}[A-Z]{1}$/);
         validatedBookingData.valid = fiscalCodeRegEx.test(validatedBookingData.fiscalCode);
         if(validatedBookingData.valid) validatedBookingData.message += 'Codice Fiscale Validato - ';
-        else validatedBookingData.message = 'Controllare il Codice Fiscale';
+        else {
+            validatedBookingData.message = 'Controllare il Codice Fiscale';
+            validatedBookingData.ticket = '';
+        }
         return validatedBookingData
     }//end isFiscalCodeValid
 
@@ -153,7 +159,10 @@ export class ReservationDto{
         const ticketRegEx = new RegExp(/^\w{8}-{1}\w{4}-{1}\w{4}-{1}\w{4}-{1}\w{12}$/);
         ticketReservation.valid = ticketRegEx.test(ticketReservation.ticket);
         if(ticketReservation.valid) ticketReservation.message = `Ticket Validato - `;
-        else ticketReservation.message = `Ticket NON valido. Il Ticket e' un codice alfanumerico, con lettere maiuscole minuscole e numeri, formato cosi: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'`;
+        else {
+            ticketReservation.message = `Ticket NON valido. Il Ticket e' un codice alfanumerico, con lettere maiuscole minuscole e numeri, formato cosi: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'`;
+            ticketReservation.ticket = '';
+        }
         return ticketReservation;
     }//end isTicketValid
 
