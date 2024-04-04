@@ -1,5 +1,4 @@
-import { Transform } from "class-transformer";
-import { IsDate, IsOptional, IsString, Length, Matches } from "class-validator";
+import { IsOptional, IsString, Length, Matches } from "class-validator";
 
 
 export class BookindDataModel {
@@ -7,8 +6,6 @@ export class BookindDataModel {
         /^\d{4}-{1}\d{1,2}-{1}\d{1,2}$/,
         {message: 'Formato Data Non Valido. Inserire il formato Data: YYYY-MM-DD'}
         )
-    // @Transform(({value}) => new Date(value))
-    // @IsDate()
     @IsString()
     date : string;
 

@@ -1,4 +1,3 @@
-import { BookindDataModel } from "../model/booking.data.model";
 import { DateModel } from "../model/date.model";
 import { FiscalCodeModel } from "../model/fiscal.code.model";
 import { ReservationModel } from "../model/reservation.model";

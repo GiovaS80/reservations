@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { DateModel } from "../model/date.model";
-import { ValidatedBookingDataModel, ValidatedBookingDataModelEmpty } from "../model/validated.booking.data.model";
+import { ValidatedBookingDataModel } from "../model/validated.booking.data.model";
 import { ReservationService } from "../service/reservation.service";
 import { BookindDataModel } from "../model/booking.data.model";
 import { FiscalCodeModel } from "../model/fiscal.code.model";
 import { TicketModel } from "../model/ticket.model";
-import { ReservationModel } from "../model/reservation.model";
 
 @Injectable()
 export class ReservationDto{
@@ -21,6 +20,17 @@ export class ReservationDto{
         message: 'Nessun Risultato Ottenuto',
         valid: false
     }
+
+    getReservations(queryParams:any):ValidatedBookingDataModel[] {
+        if(Object.keys(queryParams).length === 0) return this.getAllReservations();
+        else if(Object.keys(queryParams).length === 1){
+            if('date' in queryParams) return this.getReservationsByDate(queryParams);
+            else if('fiscalCode' in queryParams) return this.getReservationsByFiscalCode(queryParams);
+            else if('ticket' in queryParams) return this.getReservationByTicket(queryParams);
+            else return this.getGenericErrorParameter();
+        }
+        else return this.getGenericErrorParameter();
+    }//end getReservations
 
     getAllReservations():ValidatedBookingDataModel[] {
         return this.reservationService.getAllReservations();
@@ -41,7 +51,7 @@ export class ReservationDto{
             reservations.push(bookingData);
             return reservations;
         }
-    }
+    }//end getReservationsByDate
 
     getReservationsByFiscalCode(fiscalCode: FiscalCodeModel): ValidatedBookingDataModel[] {
         let bookingData : ValidatedBookingDataModel = this.BOOKING_DATA_EMPTY;
@@ -57,7 +67,7 @@ export class ReservationDto{
             reservations.push(bookingData);
             return reservations;
         }
-    }
+    }//end getReservationsByFiscalCode
 
     getReservationByTicket(ticket: TicketModel): ValidatedBookingDataModel[]{
         let bookingData : ValidatedBookingDataModel = this.BOOKING_DATA_EMPTY;
@@ -72,7 +82,7 @@ export class ReservationDto{
             reservations.push(bookingData);
             return reservations;
         }
-    }
+    }//end getReservationByTicket
 
     getGenericErrorParameter():ValidatedBookingDataModel[]{
         let bookingData : ValidatedBookingDataModel = this.BOOKING_DATA_EMPTY;
@@ -81,7 +91,7 @@ export class ReservationDto{
         reservations.push(bookingData);
 
         return reservations;
-    }
+    }//end getGenericErrorParameter
 
     newReservation(queryParams:BookindDataModel):ValidatedBookingDataModel{
         let bookingData : ValidatedBookingDataModel = this.BOOKING_DATA_EMPTY;
@@ -113,7 +123,7 @@ export class ReservationDto{
                 if(
                     validatedBookingData.message === this.BOOKINGPROCESS &&
                     dateValid.toISOString() <= dateToday.toISOString()
-                    ) throw new Error('Data NON Valida. Non si puo prenotare una data nel passato');
+                    ) throw new Error('Data NON Valida. Non si puo prenotare in data odierna o una data nel passato');
     
                 if(dateValid.toISOString() >= limitDate.toISOString()) throw new Error('Data NON Valida. Troppo nel Futuro Non abbiamo ancora l agenda per questa data');
 
@@ -137,7 +147,7 @@ export class ReservationDto{
         if(validatedBookingData.valid) validatedBookingData.message += 'Codice Fiscale Validato - ';
         else validatedBookingData.message = 'Controllare il Codice Fiscale';
         return validatedBookingData
-    }
+    }//end isFiscalCodeValid
 
     isTicketValid(ticketReservation:ValidatedBookingDataModel): ValidatedBookingDataModel{
         const ticketRegEx = new RegExp(/^\w{8}-{1}\w{4}-{1}\w{4}-{1}\w{4}-{1}\w{12}$/);
@@ -145,7 +155,7 @@ export class ReservationDto{
         if(ticketReservation.valid) ticketReservation.message = `Ticket Validato - `;
         else ticketReservation.message = `Ticket NON valido. Il Ticket e' un codice alfanumerico, con lettere maiuscole minuscole e numeri, formato cosi: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'`;
         return ticketReservation;
-    }
+    }//end isTicketValid
 
     deleteReservation(queryParams: BookindDataModel): string {
         if(Object.keys(queryParams).length != 3) return `Sono necessari 3 parametri: Data, Codice Fiscale e Ticket`;

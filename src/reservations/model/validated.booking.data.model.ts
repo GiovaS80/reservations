@@ -21,11 +21,3 @@ export class ValidatedBookingDataModel {
     @IsBoolean()
     valid?: boolean;
 }//end class ValidatedBookingDataModel
-
-export const ValidatedBookingDataModelEmpty: ValidatedBookingDataModel = {
-    date: new Date(),
-    fiscalCode: '',
-    ticket: '',
-    message: 'Nessun Risultato Ottenuto',
-    valid: false
-}
