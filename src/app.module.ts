@@ -6,18 +6,23 @@ import { ReservationController } from './reservations/controller/reservation.con
 import { ReservationService } from './reservations/service/reservation.service';
 import { ReservationDto } from './reservations/DTO/reservation.dto';
 import { ReservationRepository } from './reservations/service/reservation.repository';
-
+import { PatientController } from './patients/controller/patient.controller';
+import { PatientDto } from './patients/DTO/patient.DTO';
+import { PatientService } from './patients/service/patient.service';
 @Module({
   imports: [InMemoryDBModule],
   controllers: [
     AppController,
-    ReservationController
+    ReservationController,
+    PatientController
   ],
   providers: [
     AppService,
     ReservationDto,
     ReservationService,
-    ReservationRepository
+    ReservationRepository,
+    PatientDto,
+    PatientService
   ],
 })
 export class AppModule {}

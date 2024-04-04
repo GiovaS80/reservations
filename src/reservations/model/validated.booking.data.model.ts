@@ -6,7 +6,7 @@ export class ValidatedBookingDataModel {
 
     @Length(6)
     @Matches(
-        /^[A-Z]{6}$/,
+        /^\w{6}\d{2}\w{1}\d{2}\w{1}\d{3}\w{1}$/,
         {message: 'Codice Fiscale Non Valido'}
         )
     @IsString()

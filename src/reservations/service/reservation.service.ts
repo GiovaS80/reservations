@@ -103,6 +103,7 @@ export class ReservationService implements IReservationRepository, IReservationS
     newReservation(reservationData: ValidatedBookingDataModel): ValidatedBookingDataModel {
         reservationData = this.checkNewReservation(reservationData);
         if(reservationData.valid) reservationData = this.reservationRepository.newReservation(reservationData);
+        else return reservationData;
         if(reservationData.valid) reservationData = this.getNewTicket(reservationData);
         return reservationData;
     }//end newReservation
@@ -140,7 +141,10 @@ export class ReservationService implements IReservationRepository, IReservationS
             }
             else reservationData.valid = true;
         }
-        else reservationData.valid = true;
+        else {
+            reservationData.message = `Paziente non registrato al sistema.`
+            reservationData.valid = false;
+        }
         
         return reservationData;
     }//end checkNewReservation
