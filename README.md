@@ -23,6 +23,36 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+Esigenza
+Un piccolo studio Medico necessita della creazione di un sistema automatico per gestire le prenotazioni.
+Per farlo ha deciso di avvalersi di una WebApp disponibile pubblicamente sul web, che grazie all’utilizzo di alcune API, è in grado di salvare/ricevere/eliminare le prenotazioni per i singoli pazienti.
+
+- Per ogni singolo giorno, il numero massimo di prenotazioni possibili dai vari pazienti è 5
+- Un paziente è unicamente riconosciuto all’interno del sistema attraverso il suo Codice Fiscale
+- Un paziente può avere una sola prenotazione attiva alla volta
+- Le prenotazioni vengono riconosciute all’interno del sistema attraverso la generazione di un Ticket univoco alfanumerico
+- Per garantire un minimo di sicurezza al paziente, una prenotazione può essere eliminata solo dal paziente stesso, utilizzando il Codice Fiscale, il Ticket univoco e la data della prenotazione effettuata
+
+Gli endpoint che il server deve necessariamente esporre sono:
+
+[GET] /reservations
+Ritorna la lista di tutte le prenotazioni effettuate, da tutti gli utenti, ordinata per data di prenotazione
+
+[GET] /reservations?date=<YYYY-MM-DD>
+Ritorna la lista di tutte le prenotazioni effettuate per la data richiesta
+
+[GET] /reservations?fiscalCode=<YYYYYYYYYY>
+Ritorna le prenotazioni effettuate dall’utente che corrisponde al codice fiscale inviato
+
+[GET] /reservations?ticket=<XXXXXXXXXX>
+Ritorna la singola prenotazione che corrisponde al Ticket inviato
+
+[POST] /reservations?date=<YYYY-MM-DD>&fiscalCode=<YYYYYYYYYY>
+Richiede l’inserimento di una nuova prenotazione a sistema. Se il procedimento va a buon fine, viene ritornato il Ticket univoco della prenotazione
+
+[DELETE] /reservations?date=<YYYY-MM-DD>&fiscalCode=<YYYYYYYYYY>&ticket=<XXXXXXXXXX>
+Richiede l’eliminazione di una prenotazione effettuata
+
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
